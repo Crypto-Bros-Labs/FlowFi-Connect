@@ -27,7 +27,10 @@ class AuthRepository {
     async login(email: string, code: string): Promise<boolean> {
         try {
             // 1. Llamada al servicio API
-            const { token, refreshToken } = await authApiService.login(email, code);
+            const response = await authApiService.login(email, code);
+
+            const token = response.token;
+            const refreshToken = response.refreshToken;
 
             // 2. Guardar tokens usando AuthLocalService
             authLocalService.setTokens(token, refreshToken);

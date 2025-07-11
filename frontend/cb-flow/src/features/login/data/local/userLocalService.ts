@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserState {
     userUuid: string | null;
@@ -15,35 +16,65 @@ interface UserState {
         phone: string;
         fullName: string;
     }) => void;
+    setUserData: (data: {
+        email: string;
+        fullname: string;
+        phone: string;
+        hasAllData: boolean;
+    }) => void;
     clearUser: () => void;
 }
 
-const useUserStore = create<UserState>((set) => ({
-    userUuid: null,
-    hasAllData: null,
-    email: null,
-    phone: null,
-    fullName: null,
+const useUserStore = create<UserState>()(
+    persist(
+        (set) => ({
+            userUuid: null,
+            hasAllData: null,
+            email: null,
+            phone: null,
+            fullName: null,
 
-    setAuthData: (data) => set({
-        userUuid: data.userUuid,
-        hasAllData: data.hasAllData,
-        email: data.email
-    }),
+            setAuthData: (data) => set({
+                userUuid: data.userUuid,
+                hasAllData: data.hasAllData,
+                email: data.email
+            }),
 
-    setProfileData: (data) => set({
-        phone: data.phone,
-        fullName: data.fullName
-    }),
+            setProfileData: (data) => set({
+                phone: data.phone,
+                fullName: data.fullName
+            }),
 
-    clearUser: () => set({
-        userUuid: null,
-        hasAllData: null,
-        email: null,
-        phone: null,
-        fullName: null
-    }),
-}));
+            setUserData: (data) => set({
+                email: data.email,
+                fullName: data.fullname,
+                phone: data.phone,
+                hasAllData: data.hasAllData
+            }),
+
+            clearUser: () => set({
+                userUuid: null,
+                hasAllData: null,
+                email: null,
+                phone: null,
+                fullName: null
+            }),
+        }),
+        {
+            name: 'user-storage', // nombre único para el localStorage
+            storage: createJSONStorage(() => localStorage), // usar localStorage
+            // También puedes configurar qué campos persisten
+            partialize: (state) => ({
+                userUuid: state.userUuid,
+                hasAllData: state.hasAllData,
+                email: state.email,
+                phone: state.phone,
+                fullName: state.fullName,
+                // No persistir las funciones
+            }),
+        }
+    )
+);
 
 class UserLocalService {
     private getState() {
@@ -56,6 +87,10 @@ class UserLocalService {
 
     setProfileData(data: { phone: string; fullName: string }): void {
         this.getState().setProfileData(data);
+    }
+
+    setUserData(data: { email: string; fullname: string; phone: string; hasAllData: boolean }): void {
+        this.getState().setUserData(data);
     }
 
     clearUser(): void {
@@ -73,9 +108,14 @@ class UserLocalService {
         };
     }
 
-    // Selectores específicos
     hasUserData(): boolean {
         return !!this.getState().userUuid;
+    }
+
+    // Debug helper
+    debugState(): void {
+        console.log('🔍 User State:', this.getState());
+        console.log('📱 localStorage:', localStorage.getItem('user-storage'));
     }
 }
 

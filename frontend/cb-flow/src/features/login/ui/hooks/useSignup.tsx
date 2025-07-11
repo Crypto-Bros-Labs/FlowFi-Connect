@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userLocalService from "../../data/local/userLocalService";
 import userRepository from "../../data/repositories/userRepository";
@@ -17,9 +17,22 @@ export const useSignup = () => {
 
     const navigate = useNavigate();
 
-    const userData = userLocalService.getUserData();
+    useEffect(() => {
+        try {
+            const userData = userLocalService.getUserData();
+            console.log('🔍 UserData:', userData);
 
-    setEmail(userData.email || '');
+            if (userData && userData.email) {
+                setEmail(userData.email);
+                console.log('✅ Email loaded:', userData.email);
+            } else {
+                setEmail('test@example.com');
+            }
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            setEmail('');
+        }
+    }, []);
 
     const handleFullnameChange = (value: string) => {
         setFullname(value);
@@ -142,6 +155,7 @@ export const useSignup = () => {
         setIsLoading(true);
 
         try {
+            const userData = userLocalService.getUserData();
 
             const response = await userRepository.updateUser(
                 {

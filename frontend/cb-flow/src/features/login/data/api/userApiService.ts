@@ -1,4 +1,4 @@
-import axiosInstance from '../../../../shared/api/axiosService';
+import { axiosInstance } from '../../../../shared/api/axiosService';
 import type { UserData, UpdateUserData } from '../models/userModel';
 
 class UserService {
