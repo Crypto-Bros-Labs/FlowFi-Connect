@@ -3,6 +3,7 @@ import ButtonApp from '../../../../shared/components/ButtonApp';
 import DescriptionApp from '../../../../shared/components/DescriptionApp';
 import HeaderModal from '../../../../shared/components/HeaderModal';
 import OtpInput from './OtpInput';
+import { useOtp } from '../hooks/useOtp';
 
 interface OtpPanelProps {
     isModal?: boolean;
@@ -10,6 +11,17 @@ interface OtpPanelProps {
 }
 
 const OtpPanel: React.FC<OtpPanelProps> = ({ isModal = false, isFlow = false }) => {
+    // Configuración del OTP
+    const length = 4;
+    const onComplete = (code: string) => {
+        console.log('OTP completed:', code);
+    };
+
+    const {
+        isLoading,
+        handleLogin
+    } = useOtp({ length, onComplete });
+
     return (
         <div className="bg-white rounded-[1.25rem] w-full h-[80vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
 
@@ -39,7 +51,10 @@ const OtpPanel: React.FC<OtpPanelProps> = ({ isModal = false, isFlow = false }) 
                     paddingVertical="py-2"
                     textSize='text-sm'
                     isMobile={true}
-                    onClick={() => console.log('Continuar clicked')}
+                    onClick={handleLogin}
+                    loading={isLoading}
+                    loadingText='Verificando...'
+                    disabled={isLoading}
                 />
             </div>
 

@@ -13,11 +13,24 @@ export const useOnOffRamp = () => {
         setActiveTab(tabId);
     };
 
-    //input
+    //inputs
+    const [amount, setAmount] = useState("0.00");
+    const [showCurrencySelector, setShowCurrencySelector] = useState(false);
+    const [amountFiat, setAmountFiat] = useState("0.00");
+    const [showTokenSelector, setShowTokenSelector] = useState(false);
+
 
     return {
         activeTab,
         tabs,
-        handleTabChange
+        handleTabChange,
+        amount,
+        setAmount,
+        showCurrencySelector,
+        setShowCurrencySelector,
+        amountFiat,
+        setAmountFiat,
+        showTokenSelector,
+        setShowTokenSelector,
     };
 };

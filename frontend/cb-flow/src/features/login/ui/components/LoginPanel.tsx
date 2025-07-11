@@ -3,6 +3,7 @@ import ButtonApp from '../../../../shared/components/ButtonApp';
 import InputApp from '../../../../shared/components/InputApp';
 import DescriptionApp from '../../../../shared/components/DescriptionApp';
 import HeaderModal from '../../../../shared/components/HeaderModal';
+import { useLogin } from '../hooks/useLogin';
 
 interface LoginPanelProps {
     isModal?: boolean;
@@ -10,6 +11,15 @@ interface LoginPanelProps {
 }
 
 const LoginPanel: React.FC<LoginPanelProps> = ({ isModal = false, isFlow = false }) => {
+
+    const {
+        email,
+        isLoading,
+        error,
+        handleEmailChange,
+        handleLogin,
+    } = useLogin();
+
     return (
         <div className="bg-white rounded-[1.25rem] w-full h-[80vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
 
@@ -33,6 +43,9 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ isModal = false, isFlow = false
                     label='Correo electronico'
                     type='email'
                     placeholder='ejemplo@correo.com'
+                    value={email}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    error={error}
                 />
             </div>
 
@@ -43,11 +56,14 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ isModal = false, isFlow = false
                     paddingVertical="py-2"
                     textSize='text-sm'
                     isMobile={true}
-                    onClick={() => console.log('Continuar clicked')}
+                    onClick={handleLogin}
+                    loading={isLoading}
+                    loadingText='Verificando...'
+                    disabled={isLoading || !!error || !email}
                 />
             </div>
 
-            {/* Texto de registro */}
+            {/* Texto de registro 
             <div className="text-center">
                 <p className="text-sm text-gray-600">
                     ¿No tienes cuenta?{' '}
@@ -56,6 +72,7 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ isModal = false, isFlow = false
                     </button>
                 </p>
             </div>
+            */}
         </div>
     );
 };
