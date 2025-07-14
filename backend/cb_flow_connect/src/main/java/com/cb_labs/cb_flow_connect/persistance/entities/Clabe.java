@@ -27,7 +27,7 @@ public class Clabe {
     private Long id;
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "user_uuid", length = 36, unique = true)
+    @Column(length = 36, unique = true)
     private UUID uuid;
 
     @Column(nullable = false, length = 18)

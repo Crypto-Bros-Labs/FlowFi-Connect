@@ -30,7 +30,7 @@ public class User {
     private Long id;
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "user_uuid", length = 36, unique = true)
+    @Column(length = 36, unique = true)
     private UUID uuid;
 
     @Column(unique = true, nullable = false)

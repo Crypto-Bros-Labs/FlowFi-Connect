@@ -26,8 +26,8 @@ public class Role {
     @Column(name = "role_id")
     private Integer id;
 
-    @Column(unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 36, unique = true)
     private UUID uuid;
 
     @Column(unique = true, length = 10)

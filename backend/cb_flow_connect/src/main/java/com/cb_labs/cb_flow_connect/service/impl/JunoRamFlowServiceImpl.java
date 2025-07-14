@@ -8,6 +8,7 @@ import com.cb_labs.cb_flow_connect.service.IClabeService;
 import com.cb_labs.cb_flow_connect.service.IJunoRampFlowService;
 import com.cb_labs.cb_flow_connect.service.IJunoService;
 import com.cb_labs.cb_flow_connect.service.IRampRegistryService;
+import com.cb_labs.cb_flow_connect.web.dto.models.juno.response.JunoClabeResponse;
 import com.cb_labs.cb_flow_connect.web.dto.request.OnRampRequest;
 import com.cb_labs.cb_flow_connect.web.dto.response.BaseResponse;
 import com.cb_labs.cb_flow_connect.web.dto.response.ClabeResponse;
@@ -31,7 +32,7 @@ public class JunoRamFlowServiceImpl implements IJunoRampFlowService {
     @Override
     public BaseResponse onRampFLow(User user, LiquidityProvider provider, Token token, OnRampRequest request) {
         Clabe clabe = clabeService.findClabe(user, provider)
-                .orElseGet(() -> clabeService.saveClabe(junoService.createClabe(), user, provider));
+                .orElseGet(() -> createAndSaveClabe(user, provider));
 
         rampRegistryService.addRegistry(user, provider, token, request.amount());
 
@@ -41,6 +42,11 @@ public class JunoRamFlowServiceImpl implements IJunoRampFlowService {
                 .success(Boolean.TRUE)
                 .status(HttpStatus.OK)
                 .code(200).build();
+    }
+
+    private Clabe createAndSaveClabe(User user, LiquidityProvider provider) {
+        JunoClabeResponse clabeResponse = junoService.createClabe();
+        return clabeService.saveClabe(clabeResponse.payload().clabe(), user, provider);
     }
 
     private ClabeResponse toClabeResponse(Clabe clabe) {

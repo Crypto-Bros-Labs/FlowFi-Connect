@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClabeServiceImpl implements IClabeService {
@@ -30,6 +31,7 @@ public class ClabeServiceImpl implements IClabeService {
     private Clabe toClabe(String clabeString, User user, LiquidityProvider provider) {
         Clabe clabe = new Clabe();
 
+        clabe.setUuid(UUID.randomUUID());
         clabe.setClabe(clabeString);
         clabe.setUser(user);
         clabe.setProvider(provider);

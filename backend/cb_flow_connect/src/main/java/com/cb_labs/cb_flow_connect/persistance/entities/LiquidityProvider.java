@@ -30,8 +30,8 @@ public class LiquidityProvider {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 36, unique = true)
     private UUID uuid;
 
     @Column(nullable = false)

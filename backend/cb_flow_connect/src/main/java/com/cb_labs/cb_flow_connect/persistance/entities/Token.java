@@ -27,8 +27,8 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 36, unique = true)
     private UUID uuid;
 
     private String name;

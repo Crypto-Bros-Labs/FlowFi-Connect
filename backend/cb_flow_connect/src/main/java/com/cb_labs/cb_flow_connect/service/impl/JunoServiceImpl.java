@@ -2,6 +2,7 @@ package com.cb_labs.cb_flow_connect.service.impl;
 
 import com.cb_labs.cb_flow_connect.configurations.security.JunoConfig;
 import com.cb_labs.cb_flow_connect.service.IJunoService;
+import com.cb_labs.cb_flow_connect.web.dto.models.juno.response.JunoClabeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,14 +29,14 @@ public class JunoServiceImpl implements IJunoService {
     private JunoConfig junoConfig;
 
     @Override
-    public String createClabe() {
+    public JunoClabeResponse createClabe() {
         String endpoint = "/mint_platform/v1/clabes";
         String path = junoConfig.getBaseUrl() + endpoint;
         String httpMethod = "POST";
 
-        long nonce = System.currentTimeMillis();
+        long nonce = System.currentTimeMillis() / 1000 * 1000;
 
-        String signature = generateSignature(nonce, httpMethod, endpoint, "");
+        String signature = generateSignature(nonce, httpMethod, endpoint, "{}");
         String authHeader = String.format("Bitso %s:%d:%s", junoConfig.getApiKey(), nonce, signature);
 
         HttpHeaders headers = new HttpHeaders();
@@ -46,16 +47,14 @@ public class JunoServiceImpl implements IJunoService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(Map.of(), headers);
 
         try {
-            ResponseEntity<Map> response = restTemplate.exchange(
+            ResponseEntity<JunoClabeResponse> response = restTemplate.exchange(
                     path,
                     HttpMethod.POST,
                     entity,
-                    Map.class
+                    JunoClabeResponse.class
             );
 
-            Map mapR = response.getBody();
-
-            return "";
+            return response.getBody();
         } catch (Exception ex) {
             throw new RuntimeException(ex.getLocalizedMessage());
         }
