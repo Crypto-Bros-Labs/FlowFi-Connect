@@ -90,6 +90,8 @@ public class ApplicationSecurityConfig {
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
             auth.requestMatchers("/user").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/token/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/flow/**").hasAnyRole("USER", "ADMIN");
         });
 
         return http.build();

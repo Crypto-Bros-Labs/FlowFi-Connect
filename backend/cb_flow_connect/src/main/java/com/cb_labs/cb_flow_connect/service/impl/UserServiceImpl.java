@@ -24,6 +24,11 @@ public class UserServiceImpl implements IUserService {
     private IRoleService roleService;
 
     @Override
+    public User getUserByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
     public User getUserByValidAuthCode(String authCode) {
         return repository.findUserByValidAuthCode(authCode)
                 .orElseThrow(EntityNotFoundException::new);
@@ -37,9 +42,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public BaseResponse updateUser(UserRequest request) {
-        User user = repository.findByUuid(request.userUuid())
-                .orElseThrow(EntityNotFoundException::new);
-
+        User user = getUserByUuid(request.userUuid());
         updateUser(user, request);
 
         return BaseResponse.builder()

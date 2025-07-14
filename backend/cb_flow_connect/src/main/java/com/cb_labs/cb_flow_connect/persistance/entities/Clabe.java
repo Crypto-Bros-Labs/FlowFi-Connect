@@ -1,58 +1,48 @@
 package com.cb_labs.cb_flow_connect.persistance.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Getter @Setter
-@Table(name = "users")
-public class User {
+@Table(name = "clabes")
+public class Clabe {
 
     @Id
+    @Column(name = "clabe_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "user_uuid", length = 36, unique = true)
     private UUID uuid;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(nullable = false, length = 18)
+    private String clabe;
 
-    @Column(unique = true, length = 15)
-    private String phone;
+    private LocalDateTime createdAt;
 
-    private String fullName;
-
-    private Boolean hasAllData;
-
-    private Boolean isNonBlocked;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "liquidity_provider_id")
+    private LiquidityProvider provider;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AuthCode> authCodes;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Clabe> clabes;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
