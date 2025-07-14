@@ -22,7 +22,7 @@ const SwitchTabs: React.FC<SwitchTabsProps> = ({
     const tabWidth = 100 / tabs.length;
 
     return (
-        <div className={`relative w-full h-10 bg-[#D6E6F8] rounded-[15px] border border-[#666666] overflow-hidden ${className}`}>
+        <div className={`relative w-full h-10 bg-[#D6E6F8] rounded-[15px] border border-[#666666] overflow-hidden hover:bg-gray-100 ${className}`}>
             {/* Active tab indicator with animation */}
             <div
                 className={`absolute h-full bg-[#3E5EF5] rounded-[15px] border border-[#666666] transition-all duration-300 ease-out`}

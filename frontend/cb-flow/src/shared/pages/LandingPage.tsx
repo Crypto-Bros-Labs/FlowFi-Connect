@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonApp from '../components/ButtonApp';
-import LoginPanel from '../../features/login/ui/components/LoginPanel';
 import Footer from '../components/Footer';
+import OnOffRampPanel from '../../features/exchange/ui/components/OnOffRampPanel';
 
 const LandingPage: React.FC = () => {
     return (
@@ -31,7 +31,7 @@ const LandingPage: React.FC = () => {
                     {/* Segunda columna - Login Panel */}
                     <div className="flex-1 flex items-center justify-center w-full">
                         <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:w-85">
-                            <LoginPanel />
+                            <OnOffRampPanel />
                         </div>
                     </div>
                 </div>

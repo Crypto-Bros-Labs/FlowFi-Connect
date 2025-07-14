@@ -1,80 +1,75 @@
 import React from "react";
-import ComboBoxApp from "../../../../shared/components/ComboBoxApp";
 import DescriptionApp from "../../../../shared/components/DescriptionApp";
 import HeaderModal from "../../../../shared/components/HeaderModal";
 import InputApp from "../../../../shared/components/InputApp";
+import ComboBoxApp from "../../../../shared/components/ComboBoxApp";
 import ButtonApp from "../../../../shared/components/ButtonApp";
-import { useAddAccount } from "../hooks/useAddAccount";
+import { useAddWallet } from "../hooks/useAddWallet";
 
-interface AddAccountPanelProps {
+interface AddWalletPanelProps {
     isModal?: boolean;
     isFlow?: boolean;
 }
 
-const AddAccountPanel: React.FC<AddAccountPanelProps> = ({ isModal = false, isFlow = false }) => {
+const AddWalletPanel: React.FC<AddWalletPanelProps> = ({ isModal = false, isFlow = false }) => {
     const {
-        clabe,
-        formattedClabe,
-        handleClabeChange,
-        bankOptions,
-        selectedBankComponent,
-        handleBankSelect,
-        handleAddAccount,
+        address,
+        handleAddressChange,
+        networkOptions,
+        selectedNetworkComponent,
+        handleNetworkSelect,
+        handleAddWallet,
         isLoading,
         error,
         isFormValid
-    } = useAddAccount();
+    } = useAddWallet();
 
     return (
         <div className="bg-white rounded-[1.25rem] w-full h-[80vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
-
             <HeaderModal isModal={isModal} isFlow={isFlow} />
 
             {/* Imagen placeholder */}
             <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center">
                 <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
             </div>
 
             <DescriptionApp
-                title='Agrega tu CLABE'
-                description='Agrega tu cuenta de banco solo con tu CLABE'
+                title='Agrega tu wallet'
+                description='Agrega la dirección pública para agregar tu wallet'
             />
 
             <div className="mb-6">
                 <InputApp
-                    label='CLABE'
+                    label='Dirección pública'
                     type='text'
-                    placeholder='1234 5678 9012 3456 78'
-                    value={formattedClabe}
-                    onChange={(e) => handleClabeChange(e.target.value)}
+                    placeholder='0x9Fc5b510185E7a218A2e5BD...'
+                    value={address}
+                    onChange={(e) => handleAddressChange(e.target.value)}
                     error={error}
                 />
-                <div className="text-xs text-gray-500 mt-1">
-                    {clabe.length}/18 dígitos
-                </div>
             </div>
 
             <div className="mb-6">
                 <label className="block text-sm font-medium text-[#020F1E] mb-2">
-                    Banco
+                    Red
                 </label>
                 <ComboBoxApp
-                    options={bankOptions}
-                    selectedComponent={selectedBankComponent}
-                    onSelect={handleBankSelect}
-                    placeholder={<span className="text-gray-500">Selecciona un banco</span>}
+                    options={networkOptions}
+                    selectedComponent={selectedNetworkComponent}
+                    onSelect={handleNetworkSelect}
+                    placeholder={<span className="text-gray-500">Selecciona una red</span>}
                 />
             </div>
 
             <div className="mt-auto mb-4">
                 <ButtonApp
-                    text="Agregar cuenta"
+                    text="Agregar wallet"
                     paddingVertical="py-2"
                     textSize='text-sm'
                     isMobile={true}
-                    onClick={handleAddAccount}
+                    onClick={handleAddWallet}
                     loading={isLoading}
                     loadingText='Agregando...'
                     disabled={!isFormValid || isLoading}
@@ -84,4 +79,4 @@ const AddAccountPanel: React.FC<AddAccountPanelProps> = ({ isModal = false, isFl
     );
 };
 
-export default AddAccountPanel;
+export default AddWalletPanel;

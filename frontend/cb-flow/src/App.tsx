@@ -7,6 +7,8 @@ import OtpPage from './features/login/ui/pages/OtpPage';
 import SelectTokenPage from './features/exchange/ui/pages/SelectTokenPage';
 import OnOffRampPage from './features/exchange/ui/pages/OnOffRampPage';
 import ProtectedRoute from './shared/pages/ProtectedRoute';
+import AddAccountPage from './features/exchange/ui/pages/AddAccountPage';
+import AddWalletPage from './features/exchange/ui/pages/AddWalletPage';
 
 
 function App() {
@@ -58,6 +60,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/add-account'
+          element={
+            <ProtectedRoute>
+              <AddAccountPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/add-wallet'
+          element={
+            <ProtectedRoute>
+              <AddWalletPage />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </Router>
   );
