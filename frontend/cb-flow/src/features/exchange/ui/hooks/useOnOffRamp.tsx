@@ -199,12 +199,12 @@ export const useOnOffRamp = () => {
             {
                 id: 'addr-1',
                 address: '0x9Fc5b510185E7a218A2e5BDc8F7A14a2B8b90F123',
-                network: 'Bitcoin'
+                network: 'Arbitrum'
             },
             {
                 id: 'addr-2',
                 address: '0xA7b2C5d8F3e4B9c6D1E8f5A2B9C6d3E8F1A4B7C5',
-                network: 'Ethereum'
+                network: 'Arbitrum'
             },
             {
                 id: 'addr-3',
