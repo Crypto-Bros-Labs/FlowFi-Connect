@@ -149,6 +149,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>cb-flow-connect-api</finalName>
     </build>
 
 </project>
