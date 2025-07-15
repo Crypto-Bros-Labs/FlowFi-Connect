@@ -26,13 +26,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
+    if (!requireAuth && isAuthenticated && isSignup) {
+        return <Navigate to="/select-token" replace />;
+    }
+
     if (!requireAuth && isAuthenticated && !isSignup) {
         return <Navigate to="/signup" replace />;
     }
 
-    if (!requireAuth && isAuthenticated && isSignup) {
-        return <Navigate to="/select-token" replace />;
-    }
 
     return <>{children}</>;
 };

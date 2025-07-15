@@ -4,6 +4,7 @@ import ButtonApp from "../../../../shared/components/ButtonApp";
 import InputApp from "../../../../shared/components/InputApp";
 import DescriptionApp from "../../../../shared/components/DescriptionApp";
 import { useSignup } from "../hooks/useSignup";
+import crypto from "/illustrations/crypto.png";
 
 interface SignUpPanelProps {
     isModal?: boolean;
@@ -29,15 +30,13 @@ const SignUpPanel: React.FC<SignUpPanelProps> = ({ isModal = false, isFlow = fal
     } = useSignup();
 
     return (
-        <div className="bg-white rounded-[1.25rem] w-full h-13/16 md:h-[80vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
+        <div className="bg-white rounded-[1.25rem] w-full h-13/16 md:h-[95vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
 
             <HeaderModal isModal={isModal} isFlow={isFlow} />
 
             {/* Imagen placeholder */}
-            <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+            <div className="w-30 h-30 mx-auto mb-6 flex items-center justify-center">
+                <img src={crypto} alt="Crypto Icon" className="w-full h-full" />
             </div>
 
             <DescriptionApp
