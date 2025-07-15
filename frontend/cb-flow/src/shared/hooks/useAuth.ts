@@ -13,13 +13,13 @@ export const useAuth = () => {
     const checkAuthStatus = useCallback(() => {
         try {
             const hasAllData = userLocalService.getUserData().hasAllData;
+            console.log('Checking auth status:', { hasAllData });
+            setIsSignup(!!hasAllData);
             const hasTokens = authLocalService.hasTokens();
             setIsAuthenticated(hasTokens);
-            setIsSignup(Boolean(hasAllData));
         } catch (error) {
             console.error('Error checking auth status:', error);
             setIsAuthenticated(false);
-            setIsSignup(false);
         } finally {
             setIsLoading(false);
         }

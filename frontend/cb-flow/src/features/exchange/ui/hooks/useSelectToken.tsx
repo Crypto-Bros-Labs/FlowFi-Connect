@@ -1,20 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import tokenRepository from '../../data/repositories/tokenRepository';
+import type { Currency, Token } from '../../data/local/tokenLocalService';
+import { useNavigate } from 'react-router-dom';
 
-interface Token {
-    id: string;
-    name: string;
-    symbol: string;
-    network: string;
-    iconUrl: string; // Cambio de icon a iconUrl
-}
-
-interface Currency {
-    id: string;
-    symbol: string;
-    name: string;
-    country: string;
-    iconUrl: string;
-}
 
 export const useSelectToken = () => {
     // Estados para tokens
@@ -29,68 +17,21 @@ export const useSelectToken = () => {
 
     // Estado general
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
     // Función para obtener tokens
     const fetchTokens = useCallback(async (): Promise<Token[]> => {
         try {
             // Simular API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const response = await tokenRepository.fetchTokens();
 
-            // Mock data con URLs de imágenes reales
-            const mockTokens: Token[] = [
-                {
-                    id: 'bitcoin',
-                    name: 'Bitcoin',
-                    symbol: 'BTC',
-                    network: 'Bitcoin',
-                    iconUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
-                },
-                {
-                    id: 'ethereum',
-                    name: 'Ethereum',
-                    symbol: 'ETH',
-                    network: 'Ethereum',
-                    iconUrl: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-                },
-                {
-                    id: 'usdc-ethereum',
-                    name: 'USD Coin',
-                    symbol: 'USDC',
-                    network: 'Ethereum',
-                    iconUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
-                },
-                {
-                    id: 'usdc-arbitrum',
-                    name: 'USD Coin',
-                    symbol: 'USDC',
-                    network: 'Arbitrum',
-                    iconUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
-                },
-                {
-                    id: 'usdt-ethereum',
-                    name: 'Tether',
-                    symbol: 'USDT',
-                    network: 'Ethereum',
-                    iconUrl: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
-                },
-                {
-                    id: 'bnb',
-                    name: 'BNB',
-                    symbol: 'BNB',
-                    network: 'BSC',
-                    iconUrl: 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
-                },
-                {
-                    id: 'matic',
-                    name: 'Polygon',
-                    symbol: 'MATIC',
-                    network: 'Polygon',
-                    iconUrl: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
-
-                }
-            ];
-
-            return mockTokens;
+            if (response) {
+                // Obtener tokens del repositorio
+                const tokens = tokenRepository.getTokens();
+                return tokens;
+            } else {
+                return [];
+            }
         } catch (error) {
             throw new Error('Failed to fetch tokens ' + (error instanceof Error ? error.message : 'Unknown error'));
         }
@@ -148,7 +89,9 @@ export const useSelectToken = () => {
                 }
             ];
 
-            return mockCurrencies;
+            tokenRepository.setCurrencies(mockCurrencies);
+
+            return tokenRepository.getCurrencies();
         } catch (error) {
             throw new Error('Failed to fetch currencies' + (error instanceof Error ? error.message : 'Unknown error'));
         }
@@ -159,10 +102,10 @@ export const useSelectToken = () => {
         try {
             setTokensError(null);
 
+
             const fetchedTokens = await fetchTokens();
             setTokens(fetchedTokens);
 
-            // Seleccionar Bitcoin por defecto
             if (fetchedTokens.length > 0) {
                 setSelectedToken(fetchedTokens[0].id);
             }
@@ -199,6 +142,8 @@ export const useSelectToken = () => {
             loadTokens(),
             loadCurrencies()
         ]);
+
+        await new Promise(resolve => setTimeout(resolve, 2000)); // 2 segundos de delay
 
         setIsLoading(false);
     }, [loadCurrencies, loadTokens]);
@@ -241,14 +186,10 @@ export const useSelectToken = () => {
         const currency = getSelectedCurrency();
 
         if (token && currency) {
-            console.log('Comprar:', {
-                token: token.symbol,
-                network: token.network,
-                currency: currency.symbol,
-                timestamp: new Date().toISOString()
-            });
-            // Aquí podrías navegar a la página de compra
-            // navigate('/buy', { state: { token, currency } });
+            tokenRepository.setSelectedToken(token);
+            tokenRepository.setSelectedCurrency(currency);
+
+            navigate('/on-off-ramp')
         } else {
             console.warn('Token o currency no seleccionados');
         }
@@ -259,14 +200,10 @@ export const useSelectToken = () => {
         const currency = getSelectedCurrency();
 
         if (token && currency) {
-            console.log('Vender:', {
-                token: token.symbol,
-                network: token.network,
-                currency: currency.symbol,
-                timestamp: new Date().toISOString()
-            });
-            // Aquí podrías navegar a la página de venta
-            // navigate('/sell', { state: { token, currency } });
+            tokenRepository.setSelectedToken(token);
+            tokenRepository.setSelectedCurrency(currency);
+
+            navigate('/on-off-ramp')
         } else {
             console.warn('Token o currency no seleccionados');
         }

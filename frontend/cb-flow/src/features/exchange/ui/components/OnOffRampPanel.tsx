@@ -20,11 +20,11 @@ const OnOffRampPanel: React.FC<OnOffRampPanelProps> = ({ isModal = false, isFlow
         tabs,
         handleTabChange,
         amount,
-        setAmount,
         setShowCurrencySelector,
         amountFiat,
-        setAmountFiat,
         setShowTokenSelector,
+        handleChangeAmount,
+        handleChangeAmountFiat,
         comboBoxOptions,
         selectedProviderId,
         selectedComponent,
@@ -40,10 +40,15 @@ const OnOffRampPanel: React.FC<OnOffRampPanelProps> = ({ isModal = false, isFlow
         onBankSelect,
         showBuyInfoModal,
         showSellInfoModal,
-        openBuyModal,
+        handleBuy,
         closeBuyModal,
         openSellModal,
         closeSellModal,
+        selectedToken,
+        selectedCurrency,
+        isBuyLoading,
+        buyError,
+        canBuy,
     } = useOnOffRamp();
 
     if (isLoading) {
@@ -86,20 +91,20 @@ const OnOffRampPanel: React.FC<OnOffRampPanelProps> = ({ isModal = false, isFlow
         `}
                     >
                         <InputExchange
-                            symbol="MXN"
-                            icon={<img src="/mexican-peso-icon.png" alt="MXN" className="w-full h-full" />}
-                            value={amountFiat}
-                            onChange={setAmountFiat}
+                            symbol={selectedCurrency?.symbol || "MXN"}
+                            icon={<img src={"/mex.svg"} alt="MXN" className="w-full h-full" />}
+                            value={amount}
+                            onChange={handleChangeAmount}
                             onSelectToken={() => setShowTokenSelector(true)}
                             placeholder="0.00"
                             className="mb-4"
                         />
 
                         <InputExchange
-                            symbol="BTC"
-                            icon={<img src="/bitcoin-icon.png" alt="BTC" className="w-full h-full" />}
-                            value={amount}
-                            onChange={setAmount}
+                            symbol={selectedToken?.symbol || "MXNB"}
+                            icon={<img src={"/mxnb.svg"} alt="BTC" className="w-full h-full" />}
+                            value={amountFiat}
+                            onChange={handleChangeAmountFiat}
                             onSelectToken={() => setShowCurrencySelector(true)}
                             placeholder="0.00"
                             className="mb-4"
@@ -150,13 +155,22 @@ const OnOffRampPanel: React.FC<OnOffRampPanelProps> = ({ isModal = false, isFlow
                             )}
                         </div>
 
-                        <div className="flex mt-auto">
+
+                        <div className="flex mt-auto justify-between items-center flex-col">
+                            {buyError && (
+                                <div className="text-red-500 text-sm mb-2">
+                                    {buyError}
+                                </div>
+                            )}
                             <ButtonApp
                                 text="Comprar"
                                 textSize="text-sm"
                                 paddingVertical="py-2"
                                 isMobile={true}
-                                onClick={() => { openBuyModal(); }}
+                                onClick={() => { handleBuy(); }}
+                                disabled={!canBuy()}
+                                loading={isBuyLoading}
+                                loadingText="Validando..."
                             />
                         </div>
                     </div>
@@ -173,20 +187,20 @@ const OnOffRampPanel: React.FC<OnOffRampPanelProps> = ({ isModal = false, isFlow
         `}
                     >
                         <InputExchange
-                            symbol="BTC"
-                            icon={<img src="/bitcoin-icon.png" alt="BTC" className="w-full h-full" />}
-                            value={amount}
-                            onChange={setAmount}
+                            symbol={selectedToken?.symbol || "MXNB"}
+                            icon={<img src={"/mxnb.svg"} alt="MXNB" className="w-full h-full" />}
+                            value={amountFiat}
+                            onChange={handleChangeAmountFiat}
                             onSelectToken={() => setShowCurrencySelector(true)}
                             placeholder="0.00"
                             className="mb-4"
                         />
 
                         <InputExchange
-                            symbol="MXN"
-                            icon={<img src="/mexican-peso-icon.png" alt="MXN" className="w-full h-full" />}
-                            value={amountFiat}
-                            onChange={setAmountFiat}
+                            symbol={selectedCurrency?.symbol || "MXN"}
+                            icon={<img src={"/mex.svg"} alt="MXN" className="w-full h-full" />}
+                            value={amount}
+                            onChange={handleChangeAmount}
                             onSelectToken={() => setShowTokenSelector(true)}
                             placeholder="0.00"
                             className="mb-4"

@@ -17,6 +17,8 @@ class UserRepository {
                 fullName: response.data.fullName
             });
 
+            userLocalService.setHasAllData(true);
+
             return true;
         } catch (error) {
             console.error('Update user failed:', error);

@@ -93,6 +93,15 @@ class UserLocalService {
         this.getState().setUserData(data);
     }
 
+    setHasAllData(hasAllData: boolean): void {
+        this.getState().setUserData({
+            email: this.getState().email || '',
+            fullname: this.getState().fullName || '',
+            phone: this.getState().phone || '',
+            hasAllData: hasAllData
+        });
+    }
+
     clearUser(): void {
         this.getState().clearUser();
     }

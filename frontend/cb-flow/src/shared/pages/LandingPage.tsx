@@ -1,9 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ButtonApp from '../components/ButtonApp';
 import Footer from '../components/Footer';
 import OnOffRampPanel from '../../features/exchange/ui/components/OnOffRampPanel';
 
 const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleStartNow = () => {
+        navigate('/on-off-ramp');
+    };
+
+    const handleSeeDetails = () => {
+        navigate('/login');
+    };
+
     return (
         <div className="min-h-screen">
             {/* Primera sección - Hero */}
@@ -23,7 +34,7 @@ const LandingPage: React.FC = () => {
                                 paddingHorizontal="px-6 sm:px-8 md:px-10"
                                 text="Empezar ahora"
                                 textSize="text-sm sm:text-base md:text-lg"
-                                onClick={() => console.log('Empezar ahora clicked')}
+                                onClick={handleStartNow}
                             />
                         </div>
                     </div>
@@ -57,12 +68,12 @@ const LandingPage: React.FC = () => {
                                 stroke={true}
                                 textColor='text-[#020F1E]'
                                 backgroundColor='bg-[#EAF2FC]'
-                                onClick={() => console.log('Ver más detalles clicked')}
+                                onClick={handleSeeDetails}
                             />
                         </div>
                     </div>
 
-                    {/* Contenido principal */}
+                    {/* Contenido principal - resto del código igual... */}
                     <div className="flex flex-col xl:flex-row gap-8 sm:gap-10 md:gap-12 items-center mt-8 sm:mt-12 md:mt-16">
                         {/* Columna izquierda - Lista de características */}
                         <div className="flex-1 w-full">
@@ -119,13 +130,8 @@ const LandingPage: React.FC = () => {
 
                         {/* Columna derecha - Imagen placeholder */}
                         <div className="flex-1 w-full">
-                            <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <div className="text-center">
-                                    <svg className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <p className="text-gray-500 text-sm sm:text-base">Imagen placeholder</p>
-                                </div>
+                            <div className="w-full h-64 sm:h-80 md:h-96 rounded-lg flex items-center justify-center">
+                                <img src="/illustrations/cryp.png" alt="Placeholder" className="max-w-full max-h-full object-cover rounded-lg" />
                             </div>
                         </div>
                     </div>

@@ -1,11 +1,12 @@
+import rampRepository from "../../data/repositories/rampRepository";
 
 export const useBuyInfo = () => {
 
     // Datos mock del beneficiario y banco
-    const beneficiaryData = {
-        name: "Juan Pérez García",
-        entity: "BBVA México",
-        clabe: "0123 4567 8901 2345 67"
+    const beneficiaryData = rampRepository.getOnRampData() || {
+        name: 'N/A',
+        entity: 'N/A',
+        clabe: 'N/A',
     };
 
     // Función para copiar CLABE al portapapeles

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderModalProps {
     isModal?: boolean;
@@ -13,12 +14,22 @@ const HeaderModal: React.FC<HeaderModalProps> = ({
     onBack,
     onClose
 }) => {
+    const navigate = useNavigate();
+
+    // Función por defecto para onBack
+    const defaultOnBack = () => {
+        navigate(-1);
+    };
+
+    // Usar onBack pasado como prop o la función por defecto
+    const handleBack = onBack || defaultOnBack;
+
     return (
         <>
             {isFlow && (
                 <div className="flex justify-between items-center mb-3">
                     <button
-                        onClick={onBack}
+                        onClick={handleBack}
                         className="hover:bg-gray-100 rounded-full p-1 transition-colors"
                     >
                         <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

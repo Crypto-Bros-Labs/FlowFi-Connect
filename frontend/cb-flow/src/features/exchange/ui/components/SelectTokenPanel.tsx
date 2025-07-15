@@ -16,8 +16,18 @@ const SelectTokenPanel: React.FC<SelectTokenPanelProps> = ({ isModal = false, is
         selectedToken,
         selectToken,
         handleBuy,
-        handleSell
+        handleSell,
+        isLoading,
     } = useSelectToken();
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center p-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <span className="ml-2 text-gray-500">Cargando...</span>
+            </div>
+        )
+    }
 
     return (
         <div className="bg-white rounded-[1.25rem] w-full h-[80vh] max-w-md p-4 flex flex-col border-2 border-[#3E5EF5] shadow-lg">
@@ -36,7 +46,7 @@ const SelectTokenPanel: React.FC<SelectTokenPanelProps> = ({ isModal = false, is
                         <SelectTile
                             key={token.id}
                             leading={
-                                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
                                     <img
                                         src={token.iconUrl}
                                         alt={token.symbol}

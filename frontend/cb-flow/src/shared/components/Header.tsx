@@ -1,8 +1,18 @@
 import React from 'react';
 import ButtonApp from './ButtonApp';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleLearnMore = () => {
+        navigate('/login');
+    };
+
+    const handleTryNow = () => {
+        navigate('/on-off-ramp');
+    };
+
     return (
         <header className="flex flex-row justify-between items-center px-4 md:px-8 h-16 md:h-20">
             <div>
@@ -24,7 +34,7 @@ const Header: React.FC = () => {
                         textSize="text-sm md:text-base"
                         paddingVertical="py-2 md:py-3"
                         paddingHorizontal="px-4 md:px-6"
-                        onClick={() => console.log('Aprender más clicked')}
+                        onClick={handleLearnMore}
                     />
                 </div>
 
@@ -34,7 +44,7 @@ const Header: React.FC = () => {
                     textSize="text-sm md:text-base"
                     paddingVertical="py-2 md:py-3"
                     paddingHorizontal="px-4 md:px-6"
-                    onClick={() => console.log('Probar ahora clicked')}
+                    onClick={handleTryNow}
                 />
             </div>
         </header>

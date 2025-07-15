@@ -35,6 +35,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/on-off-ramp'
+          element={
+            <OnOffRampPage />
+          }
+        />
 
         {/* Rutas privadas */}
         <Route path='/signup'
@@ -52,14 +58,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/on-off-ramp'
-          element={
-            <ProtectedRoute>
-              <OnOffRampPage />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path='/add-account'
           element={
