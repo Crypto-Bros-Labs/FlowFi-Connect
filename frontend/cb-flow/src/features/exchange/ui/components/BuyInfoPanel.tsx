@@ -32,7 +32,7 @@ const BuyInfoPanel: React.FC<BuyInfoPanelProps> = ({ onClose }) => {
                 </h1>
             </div>
 
-            {/* Información del beneficiario */}
+            {/* Información del beneficiario 
             <div className="mb-4">
                 <p className="text-sm font-bold text-[#020F1E] mb-1">
                     Nombre de beneficiario:
@@ -48,6 +48,7 @@ const BuyInfoPanel: React.FC<BuyInfoPanelProps> = ({ onClose }) => {
                     {beneficiaryData.entity}
                 </p>
             </div>
+            */}
 
             {/* Cards de información */}
             <div className="space-y-3 mb-6">
@@ -64,7 +65,7 @@ const BuyInfoPanel: React.FC<BuyInfoPanelProps> = ({ onClose }) => {
                     onIconTap={copyToClipboard}
                 />
 
-                {/* Card compartir */}
+                {/* Card compartir 
                 <InfoCard
                     title="Guardar todos los datos"
                     trailingIcon={
@@ -75,6 +76,7 @@ const BuyInfoPanel: React.FC<BuyInfoPanelProps> = ({ onClose }) => {
                     onTap={shareData}
                     onIconTap={shareData}
                 />
+                */}
             </div>
 
             {/* Leyenda */}
