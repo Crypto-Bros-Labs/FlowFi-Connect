@@ -12,7 +12,6 @@ const BuyInfoPanel: React.FC<BuyInfoPanelProps> = ({ onClose }) => {
     const {
         beneficiaryData,
         copyToClipboard,
-        shareData,
     } = useBuyInfo();
 
     return (
