@@ -26,7 +26,7 @@ const LandingPage: React.FC = () => {
                             Convierte pesos y cripto en <span className="text-[#3E5EF5]">segundos</span>
                         </h1>
                         <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
-                            Con <span className="text-[#3E5EF5]">CB Flow Connect</span>, cualquier plataforma puede ofrecer comprar y retirar USDC de forma instantánea, sin complicaciones.
+                            Con <span className="text-[#3E5EF5]">FlowFi Connect</span>, cualquier plataforma puede ofrecer comprar y retirar USDC de forma instantánea, sin complicaciones.
                         </p>
                         <div className="flex justify-center lg:justify-start">
                             <ButtonApp
@@ -54,7 +54,7 @@ const LandingPage: React.FC = () => {
                     {/* Encabezado de la sección */}
                     <div className="text-center lg:text-left mb-8 sm:mb-10 md:mb-12">
                         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#020F1E] mb-3 sm:mb-4">
-                            Cómo funciona <span className="text-[#3E5EF5]">CB Flow</span> Connect
+                            Cómo funciona <span className="text-[#3E5EF5]">FlowFi</span> Connect
                         </h2>
                         <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-600 mb-6 sm:mb-8 font-semibold max-w-4xl mx-auto lg:mx-0">
                             <span className="text-[#3E5EF5]">Integra nuestras APIs y listo:</span> nosotros nos encargamos del resto.
