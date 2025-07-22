@@ -18,7 +18,7 @@ const Header: React.FC = () => {
             <div>
                 <Link to={'/'}>
                     <h1 className="text-lg md:text-3xl font-bold text-[#020F1E]">
-                        CB Flow Connect
+                        FlowFi Connect
                     </h1>
                 </Link>
             </div>
