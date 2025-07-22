@@ -8,10 +8,10 @@ const Footer: React.FC = () => {
                     {/* Información de la empresa */}
                     <div className="flex flex-col items-center md:items-start">
                         <h3 className="text-2xl font-bold text-white mb-2">
-                            CB Flow Connect
+                            FlowFi Connect
                         </h3>
                         <p className="text-gray-300 text-center md:text-left">
-                            Made by CB Labs team.
+                            Made by CB Labs.
                         </p>
                     </div>
 
