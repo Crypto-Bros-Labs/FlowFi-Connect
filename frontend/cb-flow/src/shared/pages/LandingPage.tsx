@@ -57,7 +57,7 @@ const LandingPage: React.FC = () => {
                             Cómo funciona <span className="text-[#3E5EF5]">CB Flow</span> Connect
                         </h2>
                         <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-600 mb-6 sm:mb-8 font-semibold max-w-4xl mx-auto lg:mx-0">
-                            <span className="text-[#3E5EF5]">Integra un solo enlace y listo:</span> nosotros nos encargamos del resto.
+                            <span className="text-[#3E5EF5]">Integra nuestras APIs y listo:</span> nosotros nos encargamos del resto.
                         </p>
                         <div className="flex justify-center lg:justify-start">
                             <ButtonApp
@@ -94,10 +94,10 @@ const LandingPage: React.FC = () => {
                                     <div className="w-2 h-2 bg-[#3E5EF5] rounded-full mt-2 sm:mt-3 flex-shrink-0"></div>
                                     <div>
                                         <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#020F1E] mb-1 sm:mb-2">
-                                            Compra y vende MXNB y USDC
+                                            Compra y vende USDC
                                         </h3>
                                         <p className="text-gray-600 text-sm sm:text-base md:text-lg">
-                                            Opera en la red de Arbitrum, rápido y con liquidez local.
+                                            Opera en la red de Base, Starknet y Worldchain, rápido y con liquidez local. Más redes muy pronto.
                                         </p>
                                     </div>
                                 </div>
