@@ -26,7 +26,7 @@ const LandingPage: React.FC = () => {
                             Convierte pesos y cripto en <span className="text-[#3E5EF5]">segundos</span>
                         </h1>
                         <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
-                            Con <span className="text-[#3E5EF5]">CB Flow Connect</span>, cualquier plataforma puede ofrecer comprar y retirar MXNB y USDC de forma instantánea, sin complicaciones.
+                            Con <span className="text-[#3E5EF5]">CB Flow Connect</span>, cualquier plataforma puede ofrecer comprar y retirar USDC de forma instantánea, sin complicaciones.
                         </p>
                         <div className="flex justify-center lg:justify-start">
                             <ButtonApp
