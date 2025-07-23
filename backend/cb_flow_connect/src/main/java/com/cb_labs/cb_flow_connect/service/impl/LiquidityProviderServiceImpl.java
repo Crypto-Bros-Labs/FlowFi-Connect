@@ -2,6 +2,7 @@ package com.cb_labs.cb_flow_connect.service.impl;
 
 import com.cb_labs.cb_flow_connect.persistance.entities.LiquidityProvider;
 import com.cb_labs.cb_flow_connect.persistance.entities.Token;
+import com.cb_labs.cb_flow_connect.persistance.entities.pivots.TokenNetwork;
 import com.cb_labs.cb_flow_connect.persistance.respositories.ILiquidityProviderRepository;
 import com.cb_labs.cb_flow_connect.service.ILiquidityProviderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,8 +23,8 @@ public class LiquidityProviderServiceImpl implements ILiquidityProviderService {
     }
 
     @Override
-    public LiquidityProvider findByUuidAndToken(UUID uuid, Token token) {
-        return repository.findByUuidToken(uuid, token).orElseThrow(EntityNotFoundException::new);
+    public LiquidityProvider findByUuidAndToken(UUID uuid, TokenNetwork token) {
+        return repository.findByUuidTokenNetwork(uuid, token).orElseThrow(EntityNotFoundException::new);
     }
 
 }

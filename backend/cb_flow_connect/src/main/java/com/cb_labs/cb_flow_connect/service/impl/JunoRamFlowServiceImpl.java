@@ -4,6 +4,7 @@ import com.cb_labs.cb_flow_connect.persistance.entities.Clabe;
 import com.cb_labs.cb_flow_connect.persistance.entities.LiquidityProvider;
 import com.cb_labs.cb_flow_connect.persistance.entities.Token;
 import com.cb_labs.cb_flow_connect.persistance.entities.User;
+import com.cb_labs.cb_flow_connect.persistance.entities.pivots.TokenNetwork;
 import com.cb_labs.cb_flow_connect.service.IClabeService;
 import com.cb_labs.cb_flow_connect.service.IJunoRampFlowService;
 import com.cb_labs.cb_flow_connect.service.IJunoService;
@@ -30,10 +31,11 @@ public class JunoRamFlowServiceImpl implements IJunoRampFlowService {
     private IRampRegistryService rampRegistryService;
 
     @Override
-    public BaseResponse onRampFLow(User user, LiquidityProvider provider, Token token, OnRampRequest request) {
+    public BaseResponse onRampFLow(User user, LiquidityProvider provider, TokenNetwork tokenNetwork, OnRampRequest request) {
         Clabe clabe = clabeService.findClabe(user, provider)
                 .orElseGet(() -> createAndSaveClabe(user, provider));
 
+        Token token = tokenNetwork.getToken();
         rampRegistryService.addRegistry(user, provider, token, request.amount());
 
         return BaseResponse.builder()

@@ -1,9 +1,13 @@
 package com.cb_labs.cb_flow_connect.service.impl;
 
 import com.cb_labs.cb_flow_connect.persistance.entities.LiquidityProvider;
+import com.cb_labs.cb_flow_connect.persistance.entities.Network;
 import com.cb_labs.cb_flow_connect.persistance.entities.Token;
+import com.cb_labs.cb_flow_connect.persistance.entities.pivots.TokenNetwork;
 import com.cb_labs.cb_flow_connect.persistance.respositories.ITokenRepository;
 import com.cb_labs.cb_flow_connect.service.ILiquidityProviderTokenService;
+import com.cb_labs.cb_flow_connect.service.INetworkService;
+import com.cb_labs.cb_flow_connect.service.ITokenNetworkService;
 import com.cb_labs.cb_flow_connect.service.ITokenService;
 import com.cb_labs.cb_flow_connect.web.dto.response.BaseResponse;
 import com.cb_labs.cb_flow_connect.web.dto.response.LiquidityProviderResponse;
@@ -29,16 +33,26 @@ public class TokenServiceImpl implements ITokenService {
     @Autowired
     private ILiquidityProviderTokenService liquidityProviderTokenService;
 
+    @Autowired
+    private ITokenNetworkService tokenNetworkService;
+
+    @Autowired
+    private INetworkService networkService;
+
     @Override
     public Token findOneAndEnsureExists(UUID uuid) {
         return repository.findByUuid(uuid).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public BaseResponse getAllTokens(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public BaseResponse getAllTokens(UUID networkUuid, int page, int size) {
+        Network network = null;
+        if (networkUuid != null) {
+            network = networkService.getByUuid(networkUuid);
+        }
 
-        Page<TokenResponse> tokensPage = repository.findAll(pageable)
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TokenResponse> tokensPage = tokenNetworkService.getAllTokens(network, pageable)
                 .map(this::toTokenResponse);
 
         return BaseResponse.builder()
@@ -50,11 +64,11 @@ public class TokenServiceImpl implements ITokenService {
     }
 
     @Override
-    public BaseResponse getTokenLiquidityProviders(UUID tokenUuid) {
-        Token token = findOneAndEnsureExists(tokenUuid);
+    public BaseResponse getTokenLiquidityProviders(UUID tokenNetworkUuid) {
+        TokenNetwork tokenNetwork = tokenNetworkService.getTokenNetworkByUuid(tokenNetworkUuid);
 
         List<LiquidityProviderResponse> providers = liquidityProviderTokenService
-                .getLiquidityProvidersByToken(token).stream()
+                .getLiquidityProvidersByToken(tokenNetwork).stream()
                 .map(this::toLiquidityProviderResponse).toList();
 
         return BaseResponse.builder()
@@ -65,12 +79,13 @@ public class TokenServiceImpl implements ITokenService {
                 .code(200).build();
     }
 
-    private TokenResponse toTokenResponse(Token token) {
+    private TokenResponse toTokenResponse(TokenNetwork tokenNetwork) {
         return new TokenResponse(
-            token.getUuid(),
-            token.getName(),
-            token.getNetwork(),
-            token.getAddress()
+            tokenNetwork.getUuid(),
+            tokenNetwork.getToken().getSymbol(),
+            tokenNetwork.getNetwork().getName(),
+            tokenNetwork.getToken().getAddress(),
+            tokenNetwork.getToken().getImageUrl()
         );
     }
 

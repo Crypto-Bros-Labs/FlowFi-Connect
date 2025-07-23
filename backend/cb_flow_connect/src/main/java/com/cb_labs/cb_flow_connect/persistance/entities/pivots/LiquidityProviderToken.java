@@ -1,7 +1,6 @@
 package com.cb_labs.cb_flow_connect.persistance.entities.pivots;
 
 import com.cb_labs.cb_flow_connect.persistance.entities.LiquidityProvider;
-import com.cb_labs.cb_flow_connect.persistance.entities.Token;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +35,7 @@ public class LiquidityProviderToken {
     private LiquidityProvider liquidityProvider;
 
     @ManyToOne
-    @JoinColumn(name = "token_id")
-    private Token token;
+    @JoinColumn(name = "token_network_id")
+    private TokenNetwork tokenNetwork;
 
 }

@@ -41,6 +41,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User updateUser(User user) {
+        return repository.save(user);
+    }
+
+    @Override
     public BaseResponse updateUser(UserRequest request) {
         User user = getUserByUuid(request.userUuid());
         updateUser(user, request);

@@ -10,5 +10,6 @@ public interface IUserService {
     User getUserByUuid(UUID uuid);
     User getUserByValidAuthCode(String authCode);
     User getOrCreate(String email);
+    User updateUser(User user);
     BaseResponse updateUser(UserRequest request);
 }

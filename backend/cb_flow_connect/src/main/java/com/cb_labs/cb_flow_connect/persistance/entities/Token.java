@@ -1,6 +1,6 @@
 package com.cb_labs.cb_flow_connect.persistance.entities;
 
-import com.cb_labs.cb_flow_connect.persistance.entities.pivots.LiquidityProviderToken;
+import com.cb_labs.cb_flow_connect.persistance.entities.pivots.TokenNetwork;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,11 +33,15 @@ public class Token {
 
     private String name;
 
-    private String network;
+    private String symbol;
 
     private String address;
 
+    private Integer decimals;
+
+    private String imageUrl;
+
     @OneToMany(mappedBy = "token", fetch = FetchType.LAZY)
-    private List<LiquidityProviderToken> liquidityProviderTokens;
+    private List<TokenNetwork> tokenNetworks;
 
 }

@@ -21,19 +21,20 @@ public class TokenController {
     @Autowired
     private ITokenService service;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<BaseResponse<TokenResponse>> getAllTokens(
-        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(required = false) UUID network,
+        @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
     ) {
-        return service.getAllTokens(page, size).apply();
+        return service.getAllTokens(network, page, size).apply();
     }
 
-    @GetMapping("{tokenUuid}/providers")
+    @GetMapping("{tokenNetworkUuid}/providers")
     public ResponseEntity<BaseResponse<LiquidityProviderResponse>> getTokenLiquidityProviders(
-        @PathVariable UUID tokenUuid
+        @PathVariable UUID tokenNetworkUuid
     ) {
-        return service.getTokenLiquidityProviders(tokenUuid).apply();
+        return service.getTokenLiquidityProviders(tokenNetworkUuid).apply();
     }
 
 }

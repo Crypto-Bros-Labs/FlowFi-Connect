@@ -5,6 +5,6 @@ import java.util.UUID;
 public record OnRampRequest(
     UUID userUuid,
     UUID providerUuid,
-    UUID tokenUuid,
+    UUID tokenNetworUuid,
     Double amount
 ) { }
