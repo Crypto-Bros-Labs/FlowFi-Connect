@@ -84,7 +84,7 @@ public class RampServiceImpl implements IRampService {
         LiquidityProvider provider = liquidityProviderService.findByUuidAndToken(liquidityProvider, tokenNetwork);
         return switch (provider.getImplementation()) {
             case JUNO -> throw new NotImplementedException();
-            case CAPA -> capaRampFlowService.quoting(tokenNetwork, type, fiatUuid, Long.valueOf(amount), null);
+            case CAPA -> capaRampFlowService.quoting(tokenNetwork, type, fiatUuid, null, Double.valueOf(amount));
         };
     }
 }

@@ -49,6 +49,7 @@ public class UserServiceImpl implements IUserService {
     public BaseResponse updateUser(UserRequest request) {
         User user = getUserByUuid(request.userUuid());
         updateUser(user, request);
+        repository.save(user);
 
         return BaseResponse.builder()
                 .data(toUserResponse(user))

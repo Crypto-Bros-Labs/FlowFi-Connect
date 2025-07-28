@@ -39,7 +39,7 @@ public class SwaggerConfig {
         components.addSecuritySchemes("JWTAuthentication", securityScheme);
 
         Server development = new Server();
-        development.setUrl("http://gcloud");
+        development.setUrl("https://cb-flow-connect-api-780866472473.us-east1.run.app/");
         development.setDescription("Development server");
 
         Server localhost = new Server();

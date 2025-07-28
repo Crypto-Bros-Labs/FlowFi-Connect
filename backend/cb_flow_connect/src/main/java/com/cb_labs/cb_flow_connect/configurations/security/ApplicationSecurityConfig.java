@@ -93,6 +93,7 @@ public class ApplicationSecurityConfig {
             auth.requestMatchers("/token/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/flow/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/bank-information/**").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/transactions/**").hasAnyRole("USER", "ADMIN");
         });
 
         return http.build();

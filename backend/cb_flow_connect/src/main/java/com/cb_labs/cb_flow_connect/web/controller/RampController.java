@@ -8,6 +8,7 @@ import com.cb_labs.cb_flow_connect.web.dto.request.OnRampRequest;
 import com.cb_labs.cb_flow_connect.web.dto.response.BaseResponse;
 import com.cb_labs.cb_flow_connect.web.dto.response.ClabeResponse;
 import com.cb_labs.cb_flow_connect.web.dto.response.OffRampResponse;
+import com.cb_labs.cb_flow_connect.web.dto.response.QuotingResponse;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class RampController {
     private IRampService service;
 
     @GetMapping("off-ramp/quoting/{liquidityProvider}")
-    public ResponseEntity<BaseResponse> quoting(
+    public ResponseEntity<BaseResponse<QuotingResponse>> quoting(
         @PathVariable UUID liquidityProvider,
         @RequestParam UUID from,
         @RequestParam UUID to,

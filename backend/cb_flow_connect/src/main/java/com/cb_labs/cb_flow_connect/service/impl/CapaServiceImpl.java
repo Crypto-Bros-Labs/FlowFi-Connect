@@ -10,6 +10,7 @@ import com.cb_labs.cb_flow_connect.web.dto.models.capa.request.CapaUserRequest;
 import com.cb_labs.cb_flow_connect.web.dto.models.capa.response.CapaKYCResponse;
 import com.cb_labs.cb_flow_connect.web.dto.models.capa.response.CapaOffRampResponse;
 import com.cb_labs.cb_flow_connect.web.dto.models.capa.response.CapaQuotingResponse;
+import com.cb_labs.cb_flow_connect.web.dto.models.capa.response.CapaTransactionHistoryResponse;
 import com.cb_labs.cb_flow_connect.web.dto.models.capa.response.CapaUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -41,6 +42,24 @@ public class CapaServiceImpl implements ICapaService {
                 HttpMethod.POST,
                 entity,
                 CapaUserResponse.class
+        );
+
+        if (!response.hasBody()) {
+            throw new RuntimeException();
+        }
+
+        return response.getBody();
+    }
+
+    @Override
+    public CapaTransactionHistoryResponse getTransactions(UUID userId) {
+        HttpEntity<Void> entity = new HttpEntity<>(getHeaders());
+
+        ResponseEntity<CapaTransactionHistoryResponse> response = restTemplate.exchange(
+                capaConfig.getBaseUrl() + "/transactions?userId=" + userId,
+                HttpMethod.GET,
+                entity,
+                CapaTransactionHistoryResponse.class
         );
 
         if (!response.hasBody()) {

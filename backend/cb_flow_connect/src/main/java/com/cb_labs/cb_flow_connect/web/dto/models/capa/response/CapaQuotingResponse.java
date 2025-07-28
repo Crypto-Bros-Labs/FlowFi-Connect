@@ -12,7 +12,7 @@ public record CapaQuotingResponse(
         String fiatCurrency,
         String blockchainSymbol,
         String tokenSymbol,
-        Long cryptoAmount,
+        Double cryptoAmount,
         Double rate,
         String flow
     ) {}

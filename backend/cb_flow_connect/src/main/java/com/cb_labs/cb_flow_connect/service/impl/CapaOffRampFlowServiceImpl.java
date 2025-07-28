@@ -34,6 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,12 +61,19 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
     public BaseResponse quoting(TokenNetwork tokenNetwork, RampType rampType, UUID fiatUuid, Long cryptoAmount, Double fiatAmount) {
         FiatCurrency fiatCurrency = fiatCurrencyService.getFiatCurrencyByUuid(fiatUuid);
 
+        Long cryptoAmountFormatted = null;
+        if (cryptoAmount != null) {
+            cryptoAmountFormatted = BigDecimal.valueOf(cryptoAmount)
+                    .multiply(BigDecimal.TEN.pow(tokenNetwork.getToken().getDecimals()))
+                    .longValue();
+        }
+
         CapaQuotingRequest request = new CapaQuotingRequest(
             tokenNetwork.getToken().getSymbol(),
             rampType.getValue(),
             tokenNetwork.getNetwork().getSymbol(),
             fiatCurrency.getSymbol(),
-            BigDecimal.valueOf(cryptoAmount).multiply(BigDecimal.TEN.pow(tokenNetwork.getToken().getDecimals())).longValue(), // Convert to Long
+            cryptoAmountFormatted,
             fiatAmount,
             0.03
         );
@@ -73,7 +81,7 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
         CapaQuotingResponse capaQuotingResponse = capaService.quoting(request);
         QuotingResponse response = new QuotingResponse(
             capaQuotingResponse.data().fiatAmount(),
-            cryptoAmount
+            BigDecimal.valueOf(capaQuotingResponse.data().cryptoAmount()).setScale(1, RoundingMode.UP).doubleValue()
         );
 
         return BaseResponse.builder()
@@ -96,8 +104,29 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
         CapaAccount capaAccount = account.get();
         CapaKYCStatusResponse statusResponse = capaService.getKYCStatus(capaAccount.getUuid());
 
-        if (!statusResponse.data().aipriseSummary().verificationResult().equals("APPROVED")) {
-            return retryKYCGeneration(user);
+        KYCStatus validateKyc = validateKyc(statusResponse.data());
+
+        switch (validateKyc) {
+            case NOT_STARTED, INCOMPLETE -> {
+                return retryKYCGeneration(user);
+            }
+            case IN_PROGRESS -> {
+                OffRampResponse response = new OffRampResponse(
+                        OffRampDetails.KYC_IN_PROGRESS,
+                        "NONE",
+                        "NONE",
+                        "NONE",
+                        "NONE"
+                );
+
+                return BaseResponse.builder()
+                        .data(response)
+                        .message("kyc required")
+                        .success(Boolean.TRUE)
+                        .status(HttpStatus.OK)
+                        .code(200).build();
+            }
+            case APPROVED -> {}
         }
 
         FiatCurrency fiatCurrency = fiatCurrencyService.getFiatCurrencyByUuid(request.fiatCurrencyUuid());
@@ -112,7 +141,7 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
             fiatCurrency.getSymbol(),
             tokenNetwork.getNetwork().getSymbol(),
             tokenNetwork.getToken().getSymbol(),
-            0.3f
+            0.03f
         );
 
         CapaOffRampResponse offRampResponse = capaService.createOffRamp(offRampRequest);
@@ -133,9 +162,47 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
                 .code(200).build();
     }
 
+    private KYCStatus validateKyc(CapaKYCStatusResponse.KYCStatusResponse response) {
+        int kycPoints = 0;
+
+        CapaKYCStatusResponse.Media kycMedia = response.media();
+
+        if (kycMedia.frontIdImageUrl() != null) {
+            ++kycPoints;
+        }
+
+        if (kycMedia.backIdImageUrl() != null) {
+            ++kycPoints;
+        }
+
+        if (kycMedia.selfieImageUrl() != null) {
+            ++kycPoints;
+        }
+
+        if (kycMedia.selfieVideoUrl() != null) {
+            ++kycPoints;
+        }
+
+        return switch (kycPoints) {
+            case 0 -> KYCStatus.NOT_STARTED;
+            case 1, 2, 3 -> KYCStatus.INCOMPLETE;
+            case 4 -> {
+                if (response.aipriseSummary().verificationResult().equals("APPROVED")) {
+                    yield KYCStatus.APPROVED;
+                }
+
+                yield KYCStatus.IN_PROGRESS;
+            }
+            default -> throw new RuntimeException();
+        };
+    }
+
     private BaseResponse retryKYCGeneration(User user) {
         CapaAccount capaAccount = user.getCapaAccount();
-        CapaKYCResponse kycResponse = generateKYC(user.getCapaAccount().getCountry().getValue(), capaAccount.getUuid());
+        CapaKYCResponse kycResponse = generateKYC(
+            user.getCapaAccount().getCountry().getValue(),
+            capaAccount.getUuid()
+        );
 
         OffRampResponse response = new OffRampResponse(
                 OffRampDetails.INVALID_KYC,
@@ -192,7 +259,11 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
     }
 
     private CapaKYCResponse generateKYC(String country, UUID userUuid) {
-        CapaKYCRequest kycRequest = new CapaKYCRequest(country, "https://lifeagent.mx");
+        CapaKYCRequest kycRequest = new CapaKYCRequest(
+            country,
+            "https://flow-fi-pos.firebaseapp.com/set-amount"
+        );
+
         return capaService.generateKYC(kycRequest, userUuid);
     }
 

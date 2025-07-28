@@ -11,7 +11,8 @@ docker build \
   --build-arg JWT_REFRESH_TOKEN_EXPIRATION_AFTER_DAYS="2" \
   --build-arg JUNO_API_KEY="IXXiZikZVl" \
   --build-arg JUNO_API_KEY_SECRET="9ba0efb1feee01dd4edf909ae26f0c0d" \
-  -t us-east1-docker.pkg.dev/life-bot-maikol/cb-flow-connect-api/cb_flow_connect_api:latest .
+  --build-arg CAPA_API_KEY="a77bbc19-1e32-4082-a526-683c73b613cf:ba1422f9-82c7-45e9-8b9e-da47eebb5e15" \
+  -t us-east1-docker.pkg.dev/life-bot-maikol/cb-flow-connect-api/cb_flow_connect_api:latest2 .
 
 # Push to Artifact Registry
-docker push us-east1-docker.pkg.dev/life-bot-maikol/cb-flow-connect-api/cb_flow_connect_api:latest
+docker push us-east1-docker.pkg.dev/life-bot-maikol/cb-flow-connect-api/cb_flow_connect_api:latest2
