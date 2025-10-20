@@ -79,9 +79,11 @@ public class CapaOffRampFlowServiceImpl implements ICapaRampFlowService {
         );
 
         CapaQuotingResponse capaQuotingResponse = capaService.quoting(request);
+        BigDecimal apiCryptoAmount = BigDecimal.valueOf(capaQuotingResponse.data().cryptoAmount());
         QuotingResponse response = new QuotingResponse(
             capaQuotingResponse.data().fiatAmount(),
-            BigDecimal.valueOf(capaQuotingResponse.data().cryptoAmount()).setScale(1, RoundingMode.UP).doubleValue()
+            apiCryptoAmount.doubleValue(),
+            apiCryptoAmount.setScale(6, RoundingMode.HALF_UP).doubleValue()
         );
 
         return BaseResponse.builder()
