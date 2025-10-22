@@ -13,5 +13,7 @@ public record UserRequest(
     String phone,
 
     @NotBlank(message = "The full name is required")
-    String fullName
+    String fullName,
+
+    String image
 ) { }
