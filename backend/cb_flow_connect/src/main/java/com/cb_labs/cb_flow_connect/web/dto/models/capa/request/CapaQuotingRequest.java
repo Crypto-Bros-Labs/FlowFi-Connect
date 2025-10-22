@@ -34,7 +34,7 @@ public record CapaQuotingRequest(
                   .append("&");
             }
             if (cryptoAmount != null) {
-                sb.append("cryptoAmount=").append(cryptoAmount).append("&");
+                sb.append("exactCryptoAmount=").append(cryptoAmount).append("&");
             }
             if (fiatAmount != null) {
                 sb.append("fiatAmount=").append(fiatAmount).append("&");

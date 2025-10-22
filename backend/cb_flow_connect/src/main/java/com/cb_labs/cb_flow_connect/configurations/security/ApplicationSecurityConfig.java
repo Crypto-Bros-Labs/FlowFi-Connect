@@ -59,6 +59,7 @@ public class ApplicationSecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
             "/user/login",
+//            "/user/info/**",
             "/jwt",
             "/auth/**"
     };
@@ -90,6 +91,7 @@ public class ApplicationSecurityConfig {
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
             auth.requestMatchers("/user").hasAnyRole("USER", "ADMIN");
+            auth.requestMatchers("/user/info/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/token/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/flow/**").hasAnyRole("USER", "ADMIN");
             auth.requestMatchers("/bank-information/**").hasAnyRole("USER", "ADMIN");

@@ -13,11 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 
 @RestController
@@ -42,6 +40,11 @@ public class UserController {
             ),
             @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credentials")
     })
-    public void login(@RequestBody UserAuthDto authDto) {}
+    public void login(@RequestBody UserAuthDto authDto) {
+    }
 
+    @GetMapping("/info/{userUuid}")
+    public ResponseEntity<BaseResponse<UserResponse>> getUserInfo(@PathVariable UUID userUuid) {
+        return service.getUserInfoByUuid(userUuid).apply();
+    }
 }

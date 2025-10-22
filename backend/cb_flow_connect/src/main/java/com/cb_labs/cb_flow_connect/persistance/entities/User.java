@@ -52,6 +52,8 @@ public class User {
 
     private Boolean isNonBlocked;
 
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

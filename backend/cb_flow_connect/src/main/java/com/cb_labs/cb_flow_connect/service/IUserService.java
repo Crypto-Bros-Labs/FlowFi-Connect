@@ -12,4 +12,5 @@ public interface IUserService {
     User getOrCreate(String email);
     User updateUser(User user);
     BaseResponse updateUser(UserRequest request);
+    BaseResponse getUserInfoByUuid(UUID uuid);
 }

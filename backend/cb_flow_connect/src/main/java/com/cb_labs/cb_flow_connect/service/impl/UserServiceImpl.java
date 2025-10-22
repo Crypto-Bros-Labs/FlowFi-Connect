@@ -28,6 +28,16 @@ public class UserServiceImpl implements IUserService {
         return repository.findByUuid(uuid).orElseThrow(EntityNotFoundException::new);
     }
 
+    public BaseResponse getUserInfoByUuid(UUID uuid) {
+        User user = getUserByUuid(uuid);
+        return BaseResponse.builder()
+                .data(toUserResponse(user))
+                .message("User found")
+                .success(Boolean.TRUE)
+                .status(HttpStatus.OK)
+                .code(200).build();
+    }
+
     @Override
     public User getUserByValidAuthCode(String authCode) {
         return repository.findUserByValidAuthCode(authCode)
@@ -63,6 +73,7 @@ public class UserServiceImpl implements IUserService {
         user.setPhone(request.phone());
         user.setFullName(request.fullName());
         user.setHasAllData(Boolean.TRUE);
+        user.setImage(request.image());
     }
 
     private User newUser(String email) {
@@ -81,10 +92,11 @@ public class UserServiceImpl implements IUserService {
 
     private UserResponse toUserResponse(User user) {
         return new UserResponse(
-            user.getUuid(),
-            user.getPhone(),
-            user.getFullName(),
-            user.getEmail()
+                user.getUuid(),
+                user.getPhone(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getImage()
         );
     }
 }
