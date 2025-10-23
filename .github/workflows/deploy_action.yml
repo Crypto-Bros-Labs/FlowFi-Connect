@@ -1,0 +1,83 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          service_account: 'continuos-deployment-backend@life-bot-maikol.iam.gserviceaccount.com'
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: 'latest'
+          project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run tests
+        run: mvn test -Dtest=com.cblabs.aaas_api.service.impl.*Test
+
+      - name: build project
+        run: |
+          mvn clean install -DskipTests
+          mvn package -DskipTests
+
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper
+        run: gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg DB_URL=${{ secrets.DB_URL }} \
+            --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --build-arg USERNAME=${{ secrets.USERNAME }} \
+            --build-arg PASSWORD=${{ secrets.PASSWORD }} \
+            --build-arg JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            --build-arg JWT_TOKEN_PREFIX=${{ secrets.JWT_TOKEN_PREFIX }} \
+            --build-arg JWT_TOKEN_EXPIRATION_AFTER_DAYS=${{ secrets.JWT_TOKEN_EXPIRATION_AFTER_DAYS }} \
+            --build-arg JWT_REFRESH_TOKEN_EXPIRATION_AFTER_DAYS=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_AFTER_DAYS }} \
+            --build-arg JUNO_API_KEY=${{ secrets.JUNO_API_KEY }} \
+            --build-arg JUNO_API_KEY_SECRET=${{ secrets.JUNO_API_KEY_SECRET }} \
+            --build-arg CAPA_API_KEY=${{ secrets.CAPA_API_KEY }} \
+            -t us-east1-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.NAME }}:${{ github.sha }} \
+            -t us-east1-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.NAME }}:latest .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push us-east1-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.NAME }}:${{ github.sha }}
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push us-east1-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.NAME }}:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ secrets.NAME }} \
+            --image us-east1-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.NAME }}:${{ github.sha }} \
+            --region us-east1 \
+            --platform managed \
+            --port ${{ secrets.PORT }} \
+            --allow-unauthenticated \
+            --timeout=300s \
+            --cpu-boost \
+            --vpc-connector ${{ secrets.VPC_CONNECTOR }} \
+            --vpc-egress all-traffic
