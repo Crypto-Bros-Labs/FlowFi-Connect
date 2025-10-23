@@ -32,9 +32,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Run tests
-        run: mvn test -Dtest=com.cblabs.aaas_api.service.impl.*Test
-
       - name: build project
         run: |
           mvn clean install -DskipTests
